@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý vé – Admin</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        h2 { margin-bottom: 15px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background: #f2f2f2; }
+        .status { padding: 4px 8px; border-radius: 6px; color: white; }
+        .paid { background: green; }
+        .pending { background: orange; }
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .delete-btn:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+
+<h2>🎫 Danh sách vé đã đặt</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Phim</th>
+            <th>Rạp</th>
+            <th>Suất chiếu</th>
+            <th>Số ghế</th>
+            <th>Giá</th>
+            <th>Trạng thái</th>
+            <th>Ngày đặt</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody id="ticketTable"></tbody>
+</table>
+
+<!-- Firebase v8 -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<script>
+    // Cấu hình Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyB1UmHNQdHuxCYijYVuPBfIz6QDCM2psEo",
+        authDomain: "dat-ve-xem-phim-d2e21.firebaseapp.com",
+        projectId: "dat-ve-xem-phim-d2e21",
+        storageBucket: "dat-ve-xem-phim-d2e21.firebasestorage.app",
+        messagingSenderId: "289808260888",
+        appId: "1:289808260888:web:6477437734b2ce06d8486d",
+    };
+
+    // Khởi tạo Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const ticketTable = document.getElementById("ticketTable");
+
+    // Lấy danh sách vé realtime
+    db.collection("tickets")
+      .orderBy("createdAt", "desc")
+      .onSnapshot(snapshot => {
+          ticketTable.innerHTML = ""; // Xóa bảng cũ
+          
+          snapshot.forEach(doc => {
+              const t = doc.data();
+
+              // Xử lý createdAt
+              let dateStr = "";
+              if (t.createdAt) {
+                  if (t.createdAt.seconds) {
+                      dateStr = new Date(t.createdAt.seconds * 1000).toLocaleString();
+                  } else {
+                      dateStr = new Date(t.createdAt).toLocaleString();
+                  }
+              }
+
+              // Tạo row bảng
+              const tr = document.createElement("tr");
+              tr.innerHTML = `
+                  <td>${doc.id}</td>
+                  <td>${t.movieName || ''}</td>
+                  <td>${t.cinema || 'Rạp 1'}</td>
+                  <td>${t.time || ''}</td>
+                  <td>${t.seat || '-'}</td>
+                  <td>${t.price ? t.price + "đ" : "90.000đ"}</td>
+                  <td><span class="status ${t.status || 'pending'}">${t.status || 'pending'}</span></td>
+                  <td>${dateStr}</td>
+                  <td><button class="delete-btn">Xóa</button></td>
+              `;
+
+              // Xử lý nút xóa
+              tr.querySelector(".delete-btn").addEventListener("click", () => {
+                  if(confirm("Bạn có chắc muốn xóa vé này?")) {
+                      db.collection("tickets").doc(doc.id).delete()
+                        .then(() => alert("Đã xóa vé!"))
+                        .catch(err => alert("Lỗi xóa vé: " + err));
+                  }
+              });
+
+              ticketTable.appendChild(tr);
+          });
+      });
+</script>
+
+</body>
+</html>

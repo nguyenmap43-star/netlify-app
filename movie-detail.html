@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Chi tiết phim</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f0f2f5;
+    margin: 0;
+    padding: 20px;
+  }
+
+  .container {
+    display: flex;
+    max-width: 900px;
+    margin: auto;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    flex-wrap: wrap;
+  }
+
+  .poster {
+    flex: 1 1 300px;
+    min-width: 300px;
+  }
+
+  .poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .details {
+    flex: 2 1 400px;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .details h2 {
+    margin-top: 0;
+    font-size: 28px;
+    color: #333;
+  }
+
+  .details p {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #555;
+  }
+
+  .details .price {
+    font-weight: bold;
+    margin: 15px 0;
+    font-size: 18px;
+  }
+
+  .details button {
+    padding: 12px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .details button:hover {
+    background: #0056b3;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
+    }
+    .poster, .details {
+      flex: 1 1 100%;
+    }
+    .poster img {
+      height: auto;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="poster">
+    <img id="movieImg" src="" alt="Poster phim">
+  </div>
+  <div class="details">
+    <h2 id="movieTitle">Tên phim</h2>
+    <p id="movieGenre"></p>
+    <p id="movieDesc"></p>
+    <p class="price">Giá vé: 90.000đ</p>
+    <button id="bookBtn">Đặt vé</button>
+  </div>
+</div>
+
+<script>
+  // Dữ liệu phim
+  const movies = {
+    movie1: {
+      title: "Truy tìm Long Diên Hương",
+      genre: "Hành động",
+      desc: "Bộ phim hành động gay cấn với nhiều cảnh quay mãn nhãn.",
+      img: "https://www.cgv.vn/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/t/r/truy_t_m_long_di_n_h_ng_-_payoff_poster_kc_14112025.jpg"
+    },
+    movie2: {
+      title: "Tình người duyên ma",
+      genre: "Tình cảm",
+      desc: "Bộ phim tình cảm cảm động về những mối quan hệ gia đình và tình yêu.",
+      img: "https://www.cgv.vn/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/7/0/700x1000-peemak.jpg"
+    },
+    movie3: {
+      title: "Quỷ ăn tạng",
+      genre: "Kinh dị",
+      desc: "Một bộ phim kinh dị rùng rợn, thích hợp cho những ai ưa cảm giác mạnh.",
+      img: "https://www.cgv.vn/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/t/y/ty3-sneak-main_poster-2-layered.jpg"
+    }
+  };
+
+  // Lấy movieId từ URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const movieId = urlParams.get('movieId') || "movie1";
+  const movie = movies[movieId];
+
+  document.getElementById("movieTitle").innerText = movie.title;
+  document.getElementById("movieGenre").innerText = "Thể loại: " + movie.genre;
+  document.getElementById("movieDesc").innerText = movie.desc;
+  document.getElementById("movieImg").src = movie.img;
+
+  document.getElementById("bookBtn").onclick = () => {
+    window.location.href = "booking.html?movieId=" + movieId;
+  };
+</script>
+
+</body>
+</html>

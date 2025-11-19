@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Chọn phim</title>
+<style>
+  body {
+    font-family: 'Arial', sans-serif;
+    padding: 20px;
+    background: #f0f2f5;
+    margin: 0;
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+    font-size: 28px;
+  }
+
+  .movie-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+
+  .movie {
+    width: 220px;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-align: center;
+  }
+
+  .movie:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  }
+
+  .movie img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+  }
+
+  .movie p {
+    margin: 12px 0;
+    font-weight: bold;
+    font-size: 16px;
+    color: #444;
+    padding: 0 10px;
+  }
+
+  @media (max-width: 600px) {
+    .movie {
+      width: 90%;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<h2>Chọn phim để xem chi tiết và đặt vé</h2>
+
+<div class="movie-list" id="movieList">
+  <!-- Card phim sẽ được tạo bằng JS -->
+</div>
+
+<script>
+  const movies = [
+    {
+      id: "movie1",
+      title: "Truy tìm Long Diên Hương",
+      img: "https://www.cgv.vn/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/t/r/truy_t_m_long_di_n_h_ng_-_payoff_poster_kc_14112025.jpg"
+    },
+    {
+      id: "movie2",
+      title: "Tình người duyên ma",
+      img: "https://www.cgv.vn/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/7/0/700x1000-peemak.jpg"
+    },
+    {
+      id: "movie3",
+      title: "Quỷ ăn tạng",
+      img: "https://www.cgv.vn/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/t/y/ty3-sneak-main_poster-2-layered.jpg"
+    }
+  ];
+
+  const movieList = document.getElementById("movieList");
+
+  movies.forEach(movie => {
+    const div = document.createElement("div");
+    div.classList.add("movie");
+    div.innerHTML = `
+      <img src="${movie.img}" alt="${movie.title}">
+      <p>${movie.title}</p>
+    `;
+    div.addEventListener("click", () => {
+      // Chuyển sang trang chi tiết phim
+      window.location.href = `movie-detail.html?movieId=${movie.id}`;
+    });
+    movieList.appendChild(div);
+  });
+</script>
+
+</body>
+</html>
